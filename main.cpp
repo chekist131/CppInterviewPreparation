@@ -14,6 +14,7 @@ using namespace std;
 
 int main()
 {
-	combinatorics::lets_try();
+	algorithms_try::modifying();
+
 	system("pause");
 }

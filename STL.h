@@ -2,11 +2,15 @@
 
 #include<vector>
 #include<list>
+#include<forward_list>
+
 #include<set>
 
 #include<stack>
 #include<queue>
 #include<deque>
+
+#include<map>
 
 #include<functional>
 
@@ -118,6 +122,106 @@ void try_modifying_algoritms()
 		v_reverse.resize(v.size());
 		copy_backward(v.begin(), v.end(), v_reverse.end());
 		copy(v_reverse.begin(), v_reverse.end(), ostream_iterator<int>(cout, " "));//??
+		cout << endl;
+	}
+}
+
+namespace stl_containers
+{
+
+	void map_try()
+	{
+		multimap<int, int> mm;
+		mm.insert(pair<int, int>(3, 27));
+		mm.insert(pair<int, int>(3, 9));
+		mm.insert(pair<int, int>(1, 1));
+		mm.insert(pair<int, int>(5, 25));
+		mm.insert(pair<int, int>(3, 125));
+		for (multimap<int, int>::iterator it = mm.begin(); it != mm.end(); ++it)
+		{
+			cout << it->first << ": " << it->second << endl;
+			it->second = 4;
+		}
+	}
+
+	void lets_try()
+	{
+		map_try();
+	}
+
+}
+
+namespace iterators_try
+{
+	//iostreams iterators with copy
+	void lets_try_copy()
+	{
+		vector<int> v;
+		copy(istream_iterator<int>(cin), istream_iterator<int>(), back_inserter<vector<int>>(v));
+		copy(begin(v), next(prev(end(v))), ostream_iterator<int>(cout, ", "));
+		cout << endl;
+	}
+
+	//iostreams iterators without copy
+	void lets_try_pure()
+	{
+		vector<int> v;
+		istream_iterator<int> it_cin(cin);
+		istream_iterator<int> it_eof;
+		back_insert_iterator<vector<int>> bii(v);
+		while (it_cin != it_eof)
+			*bii++ = *it_cin++;
+		ostream_iterator<int> osi(cout, ", ");
+		for (auto it = v.rbegin(); it != v.rend(); ++it)
+			*osi = *it;
+		cout << endl;
+	}
+}
+
+namespace algorithms_try
+{
+	void non_modifying()
+	{
+		const vector<int> v{ 1,2,3,4,5,6,7,8,9 };
+		cout << all_of(v.begin(), v.end(), [](int x) { return x < 10; }) << endl;
+		cout << all_of(v.begin(), v.end(), [](int x) { return x < 9; }) << endl;
+		cout << none_of(v.begin(), v.end(), [](int x) { return x > 9; }) << endl;
+		cout << none_of(v.begin(), v.end(), [](int x) { return x > 8; }) << endl;
+		for_each(v.begin(), v.end(), [](int x) { cout << x << ", "; });
+		cout << endl;
+		cout << (find(v.begin(), v.end(), 4) != v.end()) << endl;
+		cout << (find(v.begin(), v.end(), 10) != v.end()) << endl;
+		cout << (find_if(v.begin(), v.end(), [](int x) { return x > 9; }) != v.end()) << endl;
+		cout << (find_if(v.begin(), v.end(), [](int x) { return x > 8; }) != v.end()) << endl;
+		//...
+	}
+
+	void modifying()
+	{
+		const vector<int> v{ 1,2,3,4,5,6,7,8,9 };
+		copy_n(v.begin(), 4, ostream_iterator<int>(cout, ", "));
+		cout << endl;
+		copy_if(v.begin(), v.end(), ostream_iterator<int>(cout, ", "), [](int x) { return x % 2 == 0; });
+		cout << endl;
+		//!!
+		transform(v.begin(), v.end(), ostream_iterator<int>(cout, ", "), [](int x) { return x * 2; });
+		cout << endl;
+		replace_copy_if(v.begin(), v.end(), ostream_iterator<int>(cout, ", "), [](int x) { return x % 2 == 0; }, 44);
+		cout << endl;
+		fill_n(ostream_iterator<int>(cout, ", "), 7, 14);
+		cout << endl;
+		{
+			int i = 1;
+			generate_n(ostream_iterator<int>(cout, ", "), 9, [&i]() { i *= 2; return i; });
+			cout << endl;
+		}
+		//remove_copy: copy without value
+		//swap parts
+		rotate_copy(v.begin(), v.begin() + 5, v.end(), ostream_iterator<int>(cout, ", "));
+		cout << endl;
+		vector<int> v1(6);
+		random_shuffle(v1.begin(), v1.end());
+		copy(v1.begin(), v1.end(), ostream_iterator<int>(cout, ", "));
 		cout << endl;
 	}
 }
